@@ -1,0 +1,46 @@
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="eu.stork.sp" extends="struts-default">
+		<global-exception-mappings>
+            <exception-mapping result="error" exception="java.lang.RuntimeException"/>
+        </global-exception-mappings>
+	
+		<!-- Step1: Validate token, create session and set token -->
+		<action name="ValidateToken" class="eu.stork.ss.specific.json.RetrieveDummySP">
+			<result name="success" type="redirectAction">
+				<param name="actionName">CountrySelector</param>
+			</result>
+			<result name="error">/errorPage.jsp</result>
+		</action>
+
+		<!-- Step2: Check if session is valid (must contain TOKEN and PAL) -->
+		<action name="CountrySelector" class="eu.stork.ss.CountrySelector">
+			<result name="success">/displayCountries.jsp</result>
+			<result name="error">/errorPage.jsp</result>
+		</action>
+
+		<!-- Step3: Validate user selection and create SAML (session must contain TOKEN and PAL) -->
+		<action name="ValidateSelection" class="eu.stork.ss.ValidateSelection">
+			<result name="success">/samlRedirect.jsp</result>
+			<result name="input">/displayCountries.jsp</result>
+			<result name="error">/errorPage.jsp</result>
+		</action>
+
+		<!-- Step4: Validate SAML, save values to PAL (session must contain TOKEN and PAL) -->
+		<action name="ServiceRedirect" class="eu.stork.ss.ServiceRedirect">
+			<result name="success" type="chain">
+				<param name="actionName">ReturnToken</param>
+			</result>
+			<result name="error">/errorPage.jsp</result>
+		</action>
+
+		<!-- Step5: Provided a PAL we save the values and redirect to the SP -->
+		<action name="ReturnToken" class="eu.stork.ss.specific.json.SaveDummySP">
+			<result name="success">/tokenRedirect.jsp</result>
+			<result name="error">/errorPage.jsp</result>
+		</action>
+	</package>
+</struts>

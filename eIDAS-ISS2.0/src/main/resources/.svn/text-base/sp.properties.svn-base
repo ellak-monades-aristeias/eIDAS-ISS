@@ -1,0 +1,85 @@
+#Provider Name
+provider.name=DEMO-SP
+
+#Sp Sector
+sp.sector=DEMO-SP
+
+#Sp Aplication
+sp.aplication=DEMO-SP
+
+#Sp Country
+sp.country=LOCAL
+
+#Sp Url
+speps.url=http://10.169.254.200:8080/stork-peps/ServiceProvider
+
+#Sp return url
+sp.return=http://snf-456752.vm.okeanos.grnet.gr/stork-sb/ServiceRedirect
+
+#Sp QAA Level
+sp.qaalevel=3
+
+#The Service URLs (that we provide support)
+ds.url=http://snf-460541.vm.okeanos.grnet.gr/ebank/stork2-attributes.php?user=supporing&pass=service_ebanking&t=
+ss.url=http://snf-460541.vm.okeanos.grnet.gr/ebank/stork2-values.php?user=supporing&pass=service_ebanking&t=
+sr.url=http://snf-460541.vm.okeanos.grnet.gr/ebank/stork2-login.php?t=
+
+#Avaliable Attributes for Power Validation
+powerValidationUrl=https://localhost/PEPS/SPPowerValidation
+powerValidationRepresentative=ES/PT/123456789
+powerValidationRepresented=ES/PT/987654321
+powerValidationMandateContent=
+
+#Avaliable peps for this Sp
+country.number=17
+country1.name=LOCAL
+country1.url=http://10.169.254.200:8080/stork-peps/ServiceProvider
+country1.countrySelector=https://localhost/PEPS/CountrySelector
+country2.name=PT
+country2.url=https://eu-id.teste.cartaodecidadao.gov.pt/PEPS/ServiceProvider
+country2.countrySelector=https://eu-id.teste.cartaodecidadao.gov.pt/PEPS/CountrySelector
+country3.name=BE
+country3.url=https://extranet.approach.be/stork/peps/sp-request
+country3.countrySelector=https://extranet.approach.be/stork/peps/CountrySelector
+country4.name=SI
+country4.url=https://peps-test.mju.gov.si/PEPS/ServiceProvider
+country4.countrySelector=https://peps-test.mju.gov.si/PEPS/CountrySelector
+country5.name=LU
+country5.url=https://stork.luxtrust.lu:8443/PEPS/ServiceProvider
+country5.countrySelector=https://stork.luxtrust.lu:8443/PEPS/CountrySelector
+country6.name=EE
+country6.url=https://testPEPS.sk.ee/PEPS/ServiceProvider
+country6.countrySelector=https://testPEPS.sk.ee/PEPS/CountrySelector
+country7.name=SE
+country7.url=https://c-peps-test.siriusit.net/ServiceProvider
+country7.countrySelector=https://www3.skatteverket.se/ec_eudemo/ec_storkdummy/
+country8.name=IT
+country8.url=http://it-peps-stork.polito.it:8888/PEPS/ServiceProvider
+country8.countrySelector=http://it-peps-stork.polito.it:8888/PEPS/CountrySelector
+country9.name=AT
+country9.url=https://apps.egiz.gv.at/moa.stork.web/STORKStartAuthentication
+country9.countrySelector=
+country10.name=DE
+country10.url=http://vidp.openlimit.com:8171/VIDP-V-PEPS-web/SendPEPSAuthnRequest
+country10.countrySelector=
+country11.name=IS
+country11.url=https://storktest/PEPS/ServiceProvider
+country11.countrySelector=https://storktest/PEPS/CountrySelector
+country12.name=ES
+country12.url=https://prespanishpeps.redsara.es/PEPS/ServiceProvider
+country12.countrySelector=https://prespanishpeps.redsara.es/PEPS/CountrySelector
+country13.name=FR
+country13.url=https://193.253.58.249:11443/PEPS/ServiceProvider
+country13.countrySelector=https://193.253.58.249:11443/PEPS/CountrySelector
+country14.name=FI
+country14.url=https://testipeps.suomi.fi/PEPS/ServiceProvider
+country14.countrySelector=https://testipeps.suomi.fi/PEPS/CountrySelector
+country15.name=LT
+country15.url=https://testpeps.eid.lt/PEPS/ServiceProvider
+country15.countrySelector=https://testpeps.eid.lt/PEPS/CountrySelector
+country16.name=GB
+country16.url=
+country16.countrySelector=
+country17.name=GR
+country17.url=http://gis.ermis.gov.gr/PEPS/ColleagueRequest
+country17.countrySelector=http://gis.ermis.gov.gr/PEPS/CountrySelector

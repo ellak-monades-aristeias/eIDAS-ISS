@@ -1,0 +1,5 @@
+#NOTE: This is an internal implementation file, its format can be changed without prior notice.
+#Fri Jul 24 14:48:54 EEST 2015
+SamlEngine-1.4.2.jar>=
+SamlEngine-1.4.2-sources.jar>=
+SamlEngine-1.4.2.pom>=
