@@ -19,8 +19,10 @@ The purpose of this project is to facilitate the development of SPs, by
 ## Repository contents
   - eIDAS-ISS1.0/src folder: contains the source code of the ISS 1.0
   - eIDAS-ISS1.0/pom.xml: the maven pom.xml file of the project ISS 1.0
+  - eIDAS-ISS1.0/maven-libs folder: Required local libraries for ISS 1.0
   - eIDAS-ISS2.0/src folder: contains the source code of the ISS 2.0
   - eIDAS-ISS2.0/pom.xml: the maven pom.xml file of the project ISS 1.0
+  - eIDAS-ISS2.0/maven-libs folder: Required local libraries for ISS 2.0
   - README.md: this file
 
 ## Setting up
