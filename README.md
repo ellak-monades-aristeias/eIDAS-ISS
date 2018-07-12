@@ -3,10 +3,10 @@ Web-App tool for facilitating SP - eIDAS infrastructure interconnection
 
 ## Introduction
 The Interconnection Supporting Service Plus allows for several Service Providers (SPs) to connect and use the eIDAS infrastructure without having to implement SAML mechanisms in their infrastructure, or when a Java-capable web browser is not available.
-Current ISS+ functionality:
+Current ISS functionality:
 1.	Allows SPs to use the eIDAS infrastructure using non-encrypted (but over https) Json messages and Web Services instead of SAML.
-2.	Only one ISS+ instance can support multiple SPs using different communication formats
-3.	Simple public web access to the log file of all requests served by the ISS+
+2.	Only one ISS instance can support multiple SPs using different communication formats
+3.	Simple public web access to the log file of all requests served by the ISS
 
 It was developed by the "Information Management Lab (i4M Lab)", participant of the Atlantis Group (http://www.atlantis-group.gr/) of the University of the Aegean (https://www.aegean.gr/). 
 
@@ -59,26 +59,26 @@ xalan-2.7.2.jar
 xercesImpl-2.11.0.jar
 
 
-## Connecting using the eIDAS Interconnection Supporting Service Plus (ISS+)
+## Connecting using the eIDAS Interconnection Supporting Service Plus (ISS)
 
-Connecting to the Greek eIDAS Infrastructure consists of two main steps. The first one is setting up and deploying the ISS+ app on a separate server. The second step is setting up the SP (which can reside on another non-Java capable web server) to interact with ISS+.
-The ISS+ package contains 1 file to facilitate the integration of a new SP to the Greek eIDAS Infrastructure:
+Connecting to the Greek eIDAS Infrastructure consists of two main steps. The first one is setting up and deploying the ISS app on a separate server. The second step is setting up the SP (which can reside on another non-Java capable web server) to interact with ISS.
+The ISS package contains 1 file to facilitate the integration of a new SP to the Greek eIDAS Infrastructure:
 
-1. ISSPlus.war:	The Java Web application package containing the ISS+ executables as well as the configuration files.
+1. ISSPlus.war:	The Java Web application package containing the ISS executables as well as the configuration files.
 
-### Deploying the ISS+ app 	
+### Deploying the ISS app 	
  
-After deployment is complete, the following environmental variable needs to be set in the tomcat execution environment (either as OS/AS environment variable or command-line parameter): SP_CONFIG_REPOSITORY. The variable must point to the location of the file system where the ISS+ was deployed, followed by the subdirectories WEB-INF/classes
+After deployment is complete, the following environmental variable needs to be set in the tomcat execution environment (either as OS/AS environment variable or command-line parameter): SP_CONFIG_REPOSITORY. The variable must point to the location of the file system where the ISS was deployed, followed by the subdirectories WEB-INF/classes
 
 ### Setting up the keystore 
 
 The aforementioned directory contains the file eidasKeystore.jks, which must contain all the necessary certificates for secure and trusted communication with the eIDAS Node. The following steps need to be executed in order to prepare the keystore for operation.
 1.	Change the keystore password (current password: “local-demo”)
-2.	Obtain a certificate which identifies the SP (ie: the ISS+). The certificate must satisfy the criteria described in the eIDAS - Cryptographic requirements for the Interoperability Framework document , regarding SAML signing certificates.
+2.	Obtain a certificate which identifies the SP (ie: the ISS). The certificate must satisfy the criteria described in the eIDAS - Cryptographic requirements for the Interoperability Framework document , regarding SAML signing certificates.
 3.	Import the certificate in the keystore as a PrivateKeyEntry
 4.	Provide the Greek eIDAS Node team with the public certificate of the SP, to be added to the Greek eIDAS Node list of trusted SPs.
 
-### Configuring the ISS+ app
+### Configuring the ISS app
 
 In addition, the following information needs to be modified in the following configuration files:
 
@@ -140,41 +140,41 @@ sp.properties
     sp1.sf.url=SP Authentication failure/error redirect URL
     sp1.mode=(json|ws) communication mode. 
 
-### Interacting with ISS+
+### Interacting with ISS
 
-The ISS+ has one entry point, one exit point and requires two API calls on the SP side:
+The ISS has one entry point, one exit point and requires two API calls on the SP side:
 1. one URL in order to retrieve the list of Attributes to request from STORK,
 2. and a second URL to store the values of the Attribute that were returned from STORK.
 
 Both those URLs provide a Json formatted document. The format of the document is explained in Appendix I.
-For the remaining section we will assume that the ISS+ is installed and running in the following
-location: http://localhost/ISSPlus/ and the SP is installed and running in: http://localhost/da/. The first step for the SP is to create a unique random identifier. This identifier will be unique and different for each user request, much like a session ID. We call this unique identifier token and it will be used by the ISS+ and the SP in order to identify a specific user request. After the creation of the token the SP will redirect the user to the ISS+ entry point. For demonstration purposes we will assume that the unique token that was generated is: 1234567890, so the entry point of the ISS+ is:
+For the remaining section we will assume that the ISS is installed and running in the following
+location: http://localhost/ISSPlus/ and the SP is installed and running in: http://localhost/da/. The first step for the SP is to create a unique random identifier. This identifier will be unique and different for each user request, much like a session ID. We call this unique identifier token and it will be used by the ISS and the SP in order to identify a specific user request. After the creation of the token the SP will redirect the user to the ISS entry point. For demonstration purposes we will assume that the unique token that was generated is: 1234567890, so the entry point of the ISS is:
 https://localhost/da/ValidateToken?t=1234567890
 
-The following table enumerates the parameters of the HTTP request which redirects the user to the ISS+:
+The following table enumerates the parameters of the HTTP request which redirects the user to the ISS:
 
 Paramater Name	Parameter Purpose	Mandatory
 t	Sp-generated random Token. Used to identify authentication requests	yes
-sp	ID of the requesting SP as defined in the ISS+ sp.properties configuration file	yes
+sp	ID of the requesting SP as defined in the ISS sp.properties configuration file	yes
 cc	Citizen Country Code. If not provided, the user will be requested to choose between the supported countries	no
 saml	Generated Saml version definition. While communicating with the Greek eIDAS infrastructure, the value of this parameter should always be “eIDAS”.	yes
 qaa	The level of Assurance required for this request for the provided authentication data (1=Non-existent,2=Low,3=Substantial,4=High)
 If not provided, the qaa defined in sp.properties will be used.	No
 
 (Entry point example: https://localhost/da/ValidateToken?t=0f985470-3adb-4b33-8bb6-d6f515ab8bce&sp=sp1&cc=GR&saml=eIDAS)
-Both aforementioned SP endpoints (retrieving the requested attribute list and pushing the authentication results) also require the token parameter in order to identify the specific authentication request. In addition, the ISS+ HTTP request to the SP’s second endpoint (pushing authentication results) also contains a second parameter “r”, which contains the authentication results, as described in Appendix II.
+Both aforementioned SP endpoints (retrieving the requested attribute list and pushing the authentication results) also require the token parameter in order to identify the specific authentication request. In addition, the ISS HTTP request to the SP’s second endpoint (pushing authentication results) also contains a second parameter “r”, which contains the authentication results, as described in Appendix II.
 This SP endpoint must either return a Json “OK” message, which means the user is authenticated in the SP, or “NOK” in case the user is not accepted. 
-The exit point is the URL to redirect the user once the ISS+ has finished all the work. This URL is part of the SP and is used to map the SP specific logic (role assignment) in terms of attributes and attribute values that are returned from the ISS+. This URL is outside the scope of this document but for demonstration purposes we will assume that it is the following:
+The exit point is the URL to redirect the user once the ISS has finished all the work. This URL is part of the SP and is used to map the SP specific logic (role assignment) in terms of attributes and attribute values that are returned from the ISS. This URL is outside the scope of this document but for demonstration purposes we will assume that it is the following:
 https://localhost/da/eidas-login.php?t=<random token>
 
 Please note that the random token is the same token that was used in the entry point. This way the SP knows how to identify the user that created the original request.
 
-## Appendix I: ISS+ Json API
+## Appendix I: ISS Json API
 
 ### Attribute List Retrieval API
 
-The most important part when interfacing with the ISS+ are the two API calls that are used by the ISS+ and the SP in order to exchange information securely (out-of-band communication). As we mentioned earlier the ISS+ has an open design and can be extended to support custom SP needs. The current version of the ISS+ supports JSON formatted communication.
-The first step for the ISS+ is to retrieve the list of Attributes. So the ISS+ will communicate with a URL provided by the SP presenting the token. If everything is correct (i.e. valid token) the data returned by the URL must be in the following format:
+The most important part when interfacing with the ISS are the two API calls that are used by the ISS and the SP in order to exchange information securely (out-of-band communication). As we mentioned earlier the ISS has an open design and can be extended to support custom SP needs. The current version of the ISS supports JSON formatted communication.
+The first step for the ISS is to retrieve the list of Attributes. So the ISS will communicate with a URL provided by the SP presenting the token. If everything is correct (i.e. valid token) the data returned by the URL must be in the following format:
 
     {
       "status":"OK",
@@ -210,7 +210,7 @@ For clarity we also provide a sample output that the DA Attribute List Retrieval
 
 ### Attribute Values Storage API
 
-Once the ISS+ has received the populated Attribute List it must deliver these values to the SP. This is performed via JSON again. The only difference is that the ISS+ is not retrieving data from the SP, but sending data. Using the HTTP POST method the SS send a JSON object with the following format:
+Once the ISS has received the populated Attribute List it must deliver these values to the SP. This is performed via JSON again. The only difference is that the ISS is not retrieving data from the SP, but sending data. Using the HTTP POST method the SS send a JSON object with the following format:
 
     {
       "attribute name ":{
