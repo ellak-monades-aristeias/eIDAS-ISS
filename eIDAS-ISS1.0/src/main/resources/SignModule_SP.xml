@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+
+<properties>
+        <comment>SWModule sign with JKS.</comment>
+        <entry key="keystorePath">/opt/keystores/Stork2-Pre-DemoSP.jks</entry>
+        <entry key="keyStorePassword">Stork2-Pre-DemoSP</entry>
+        <entry key="keyPassword">Stork2-Pre-DemoSP</entry>
+        <entry key="issuer">CN=Stork2-Pre-DemoSP, OU=ELECTRONIC DATA PROCESSING DIRECTORATE, O=HELLENIC MINISTRY OF ADMINISTRATION REFORM AND E_GOVERNANCE, L=ATHENS, ST=ATTICA, C=GR</entry>
+        <entry key="serialNumber">538adda4</entry>
+        <entry key="keystoreType">JKS</entry>
+</properties>

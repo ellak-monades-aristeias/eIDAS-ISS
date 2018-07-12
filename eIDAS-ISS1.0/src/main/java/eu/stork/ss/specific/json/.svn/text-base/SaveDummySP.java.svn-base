@@ -1,0 +1,156 @@
+package eu.stork.ss.specific.json;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
+import org.apache.http.Consts;
+import org.apache.http.HttpEntity;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.gson.Gson;
+
+import eu.stork.peps.auth.commons.AttributeUtil;
+import eu.stork.peps.auth.commons.IPersonalAttributeList;
+import eu.stork.peps.auth.commons.PEPSValues;
+import eu.stork.peps.auth.commons.PersonalAttribute;
+import eu.stork.ss.Constants;
+import eu.stork.ss.SPUtil;
+import eu.stork.ss.SavePersonalAttributeList;
+
+public class SaveDummySP extends SavePersonalAttributeList {
+	/**
+	 * Unique identifier.
+	 */
+	private static final long serialVersionUID = 1588295800440516440L;
+
+	//Logger
+	static final Logger logger = LoggerFactory.getLogger(SaveDummySP.class.getName());
+
+	@Override
+	protected String savePersonalAttributeList(String token, IPersonalAttributeList pal) {
+		boolean outcome = false;
+		HashMap<String, Attribute> list;
+		String serviceUrl = "http://localhost/stork2-attributes.php?t=";
+		String returnUrl = "http://localhost/stork2-login.php?t=";
+
+		logger.debug("Trying to save the PAL with JSON.");
+
+		try {
+			//Load the configuration (URL)
+			try {
+				Properties configs = SPUtil.loadConfigs(Constants.SP_PROPERTIES);
+				
+				serviceUrl = configs.getProperty(Constants.SS_URL);
+				returnUrl = configs.getProperty(Constants.SR_URL);
+			} catch (IOException e) {
+			}
+
+			logger.debug("The ServiceURL: [" + serviceUrl + "]");
+			logger.debug("The ReturnURL: [" + returnUrl + "]");
+
+			logger.debug("The PAL from STORK: [" + pal.toString() + "]");
+
+			list = new HashMap<String, Attribute>();
+			for( PersonalAttribute pa: pal ) {
+				final Attribute att = new Attribute();
+	
+				if ( !pa.isEmptyComplexValue() ) {
+					att.setComplex("1");
+					att.setValue(wrapComplexValue(pa.getComplexValue()));
+				}
+				else {
+					att.setComplex("0");
+					if ( !pa.isEmptyValue() )
+						att.setValue(wrapValue(pa.getValue()));
+				}
+	
+				if ( pa.isRequired() )
+					att.setRequired("1");
+				else
+					att.setRequired("0");
+				list.put(pa.getName(), att);
+			}
+
+			CloseableHttpClient httpclient = HttpClients.createDefault();
+
+			try {
+				Gson gson = new Gson();
+				List <NameValuePair> nvps = new ArrayList <NameValuePair>();
+				String param, httpJson;
+				HttpPost httpost;
+				CloseableHttpResponse response;
+				HttpEntity entity;
+				SaveAttributes status;
+
+				param = gson.toJson(list);
+
+				logger.trace("The JSON to send: [" + param + "]");
+
+				httpost = new HttpPost(serviceUrl + token);
+				nvps.add(new BasicNameValuePair("r", param));
+				httpost.setEntity(new UrlEncodedFormEntity(nvps, Consts.UTF_8));
+
+				response = httpclient.execute(httpost);
+
+				try {
+					entity = response.getEntity();
+				    httpJson = EntityUtils.toString(entity);
+				    status = gson.fromJson(httpJson, SaveAttributes.class);
+				    
+					logger.trace("The JSON response: [" + status + "]");
+
+				    if ( status.getStatus().equals("OK") )
+				    	outcome = true;
+				} finally {
+				    response.close();
+				}
+			} finally {
+			    httpclient.close();
+			}
+		} catch(Exception ex) {
+			logger.error("IOException: [" + ex + "]");
+		}
+
+		if ( outcome )
+			return returnUrl + token;
+		else
+			return null;
+	}
+
+	/**
+	 * Wrap complex value in a String
+	 * 
+	 * @param map The complex value Map
+	 * 
+	 * @return The wrapped complex value
+	 */
+	private String wrapComplexValue(Map<String, String> map) {
+		return AttributeUtil.mapToString(map,
+				PEPSValues.ATTRIBUTE_VALUE_SEP.toString());
+	}
+
+	/**
+	 * Wrap value in a String
+	 * 
+	 * @param value The value List
+	 * 
+	 * @return The wrapped value
+	 */
+	private String wrapValue(List<String> value) {
+		return AttributeUtil.listToString(value,
+		        PEPSValues.ATTRIBUTE_VALUE_SEP.toString());
+	}
+}

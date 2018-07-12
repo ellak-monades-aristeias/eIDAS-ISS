@@ -227,4 +227,4 @@ As we can see this object is identical with the list object we described in the 
       "status":"OK"
     }
 
-If the response is OK, then the SS can redirect the user back to the SP using the appropriate point. 
+If the response is OK, then the ISS can redirect the user back to the SP using the appropriate (success) endpoint. If it is "NOK" the user will be redirected to the failure endpoint.
